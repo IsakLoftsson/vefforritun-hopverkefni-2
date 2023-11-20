@@ -1,0 +1,137 @@
+/* Reset og border-box á allt */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+:root {
+  --spacing: 1rem;
+  --max-width: 56rem;
+
+  --font-family: -system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+img {
+  max-width: 100%;
+}
+
+html {
+  font-family: var(--font-family);
+}
+
+input,
+select,
+button {
+  font-size: inherit;
+}
+
+input[type='number'] {
+  padding-inline-start: calc(var(--spacing) / 2);
+}
+
+button {
+  padding-inline: calc(var(--spacing) / 2);
+}
+
+h1 {
+  font-size: 2.5rem;
+  margin-block-end: var(--spacing);
+  font-weight: 800;
+}
+
+h2 {
+  padding-top: var(--spacing);
+  font-size: 1.7rem;
+  font-weight: 700;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing);
+  width: 50%;
+  margin: var(--spacing) auto;
+  max-width: var(--max-width);
+}
+
+/* TODO nánari stílar */
+
+main {
+  display: flex;
+  align-items: center;
+}
+
+button {
+  margin-left: var(--spacing);
+}
+
+body {
+  gap: var(--spacing);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.results {  
+  flex-direction: column;
+  gap: var(--spacing);
+  list-style: none;
+  position: relative;
+  right: 20%;
+}
+
+.results li {
+  padding-top: var(--spacing);
+}
+
+.mission {
+  display: flex;
+  flex-direction: row;
+  font-size: 17px;
+}
+
+.mission h3 {
+  padding-right: calc(var(--spacing)/2);
+  font-size: 17px;
+}
+
+.launch-title{
+  display: flex;
+  justify-content: center;
+}
+
+.launch-site {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+
+.launch-image {
+  padding-top: var(--spacing);
+}
+
+p {
+  font-size: 17px;
+}
+
+.go-back {
+  padding-top: var(--spacing);
+  padding-bottom: calc(var(--spacing)*3);
+}
+
+a {
+  font-size: 17px;
+}
+
