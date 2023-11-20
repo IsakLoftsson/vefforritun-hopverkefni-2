@@ -1,6 +1,6 @@
 /**
  * API föll.
- * @see https://lldev.thespacedevs.com/2.2.0/swagger/
+ * @see https://vef1-2023-h2-api-791d754dda5b.herokuapp.com/
  */
 
 /**
@@ -11,7 +11,7 @@
  */
 
 /** Grunnslóð á API (DEV útgáfa) */
-const API_URL = 'https://lldev.thespacedevs.com/2.2.0/';
+const API_URL = 'https://vef1-2023-h2-api-791d754dda5b.herokuapp.com/';
 
 async function queryApi(url) {
   // await sleep(1000);
@@ -48,19 +48,18 @@ export async function sleep(ms) {
  * @returns {Promise<Launch[] | null>} Fylki af geimskotum eða `null` ef villa
  *  kom upp.
  */
-export async function searchLaunches(query) {
-  const url = new URL('launch', API_URL);
-  // console.log('searchlaunches: url:', url);
+export async function searchProducts(query) {
+  const url = new URL('products', API_URL);
+  console.log('searchProducts: url:', url);
   url.searchParams.set('search', query);
   url.searchParams.set('mode', 'list');
-  // console.log('url:', url);
 
   let response;
   try {
     response = await fetch(url);
-    // console.log('response úr fetch:', response);
+    console.log('response úr fetch:', response);
   } catch (e) {
-    // console.error('Villa kom upp við að sækja gögn');
+    console.error('Villa kom upp við að sækja gögn');
     return null;
   }
 
@@ -76,13 +75,14 @@ export async function searchLaunches(query) {
   let json;
   try {
     json = await response.json();
-    // console.log('json:', json);
+    console.log('json er:', json);
   } catch (e) {
     console.error('Villa við að vinna úr JSON');
     return null;
   }
 
-  return json.results;
+  console.log('json.items:', json.items);
+  return json.items;
 }
 
 /**
@@ -90,9 +90,9 @@ export async function searchLaunches(query) {
  * @param {string} id Auðkenni geimskots.
  * @returns {Promise<LaunchDetail | null>} Geimskot.
  */
-export async function getLaunch(id) {
+export async function getProducts(id) {
   // console.log('id:', id);
-  const url = new URL(`launch/${id}`, API_URL);
+  const url = new URL(`products/${id}`, API_URL);
   // console.log('url:', url);
   const result = await queryApi(url);
   // console.log('result:', result);
@@ -103,13 +103,11 @@ export async function getLaunch(id) {
 
   return {
     id: result.key,
-    name: result.name ?? '',
-    window_start: result.window_start ?? '',
-    window_end: result.window_end ?? '',
-    status_name: result.status.name ?? '',
-    status_description: result.status.description ?? '',
-    mission_name: result.mission.name ?? '',
-    mission_description: result.mission.description ?? '',
+    title: result.title ?? '',
+    price: result.price ?? '',
+    description: result.description ?? '',
     image: result.image ?? '',
+    category_id: result.category_id ?? '',
+    category_title: result.category_title ?? ''
   };
 }

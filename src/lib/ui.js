@@ -1,4 +1,4 @@
-import { getLaunch, searchLaunches } from './api.js';
+import { getProducts, searchProducts } from './api.js';
 import { el } from './elements.js';
 
 /**
@@ -8,9 +8,9 @@ import { el } from './elements.js';
  * @returns {HTMLElement} Leitarform.
  */
 export function renderSearchForm(searchHandler, query = undefined) {
-  // const form = el('form', {}, el('input', { type: 'text', name: 'query', value: query ?? '' }), el('button', {}, 'Leita'));
-  const form = el('form', {}, 
-    el('input' , {value: query ?? '', placeholder: 'Leitarorð' }), 
+  const form = el('form', {},
+    el('label', {}, 'Leita: '),
+    el('input', { value: query ?? '', placeholder: 'Leitarorð' }),
     el('button', {}, 'Leita'));
   form.addEventListener('submit', searchHandler);
   return form;
@@ -69,7 +69,7 @@ function setNotLoading(parentElement, searchForm = undefined) {
  * @param {string} query Leitarstrengur.
  */
 function createSearchResults(results, query) {
-  const list = el('ul', {class : 'results'});
+  const list = el('ul', { class: 'results' });
   list.appendChild(el('h2', { class: 'results__title' }, `Leitarniðurstöður fyrir: "${query}"`));
 
   if (!results) {
@@ -85,9 +85,14 @@ function createSearchResults(results, query) {
   }
 
   for (const result of results) {
-    const resultElement = el('li',{class: 'result'}, 
-      el('span', {class: 'name' }, el('a',{href: `/?id=${result.id}`}, result.name)),
-      el('span', {class: 'mission'}, el('h3',{},'Geimferð: '), result.mission),
+    const imageElement = el('img', { src: result.image, alt: 'Product Image' });
+    const linkElement = el('a', { href: `/?id=${result.id}` }, imageElement);
+    const resultElement = el('li', { class: 'result' },
+      el('span', { class: 'image' }, linkElement),
+      el('span', { class: 'title' }, result.title),
+      el('span', { class: 'price' }, result.price),
+      el('span', { class: 'kr'}, 'kr.-'),
+      el('span', { class: 'category_title' }, result.category_title),
     );
     list.appendChild(resultElement);
   }
@@ -108,7 +113,7 @@ export async function searchAndRender(parentElement, searchForm, query) {
     console.warn('fann ekki <main> element');
     return;
   }
-  
+
   // Fjarlægja fyrri niðurstöður
   const resultsElement = mainElement.querySelector('.results');
   if (resultsElement) {
@@ -116,10 +121,12 @@ export async function searchAndRender(parentElement, searchForm, query) {
   }
 
   setLoading(mainElement, searchForm);
-  const results = await searchLaunches(query);
+  const results = await searchProducts(query);
+  console.log('searchAndRender: results:', results);
   setNotLoading(mainElement, searchForm);
 
   const resultsEl = createSearchResults(results, query);
+  console.log('searchAndRender: resultsEl:', resultsEl);
 
   mainElement.appendChild(resultsEl);
 }
@@ -135,7 +142,7 @@ export function renderFrontpage(
   searchHandler,
   query = undefined,
 ) {
-  const heading = el('h1', { class: 'heading', 'data-foo' : 'bar'}, 'Geimskotaleitin 🚀');
+  const heading = el('h1', { class: 'heading', 'data-foo': 'bar' }, 'Clothing..');
   const searchForm = renderSearchForm(searchHandler, query);
   const container = el('main', {}, heading, searchForm);
   parentElement.appendChild(container);
@@ -149,28 +156,26 @@ export function renderFrontpage(
 
 
 /**
- * Útbýr element fyrir öll gögn um bók. Birtir titil fyrir þau gögn sem eru til
+ * Útbýr element fyrir öll gögn um vöru. Birtir titil fyrir þau gögn sem eru til
  * staðar (ekki tóm fylki) og birtir þau.
- * @param {object} launch Gögn fyrir bók sem á að birta.
- * @returns Element sem inniheldur öll gögn um bók.
+ * @param {object} product Gögn fyrir vöru sem á að birta.
+ * @returns Element sem inniheldur öll gögn um vöru.
  */
-export function createLaunch(launch) {
-  const launchEl = el('div', { class: 'launch-site' }, 
-    el('h1', { class: 'launch-title' }, launch.name));
-  launchEl.appendChild(el('p', { class: 'window-start' }, `Gluggi opnast: ${launch.window_start}`));
-  launchEl.appendChild(el('p', { class: 'window-end' }, `Gluggi lokast: ${launch.window_end}`));
-  launchEl.appendChild(el('h2', { class: 'status' }, `Staða: ${launch.status_name}`));
-  launchEl.appendChild(el('p', { class: 'status-description' }, launch.status_description));
-  launchEl.appendChild(el('h2', { class: 'mission-name' }, `Geimferð: ${launch.mission_name}`));
-  launchEl.appendChild(el('p', { class: 'mission-description' }, launch.mission_description));
-
-  if (launch.image) {
-    launchEl.appendChild(el('img', { class: 'launch-image', src: launch.image }));
+export function createProduct(product) {
+  const productEl = el('div', { class: 'product-site' },
+    el('h1', { class: 'product-title' }, product.title));
+  
+  if (product.image) {
+    productEl.appendChild(el('img', { class: 'product-image', src: product.image }));
   }
+  
+  productEl.appendChild(el('p', { class: 'category_title' }, `Flokkur: ${product.category_title}`));
+  productEl.appendChild(el('p', { class: 'price' }, `Verð: ${product.price} kr.-`));
+  productEl.appendChild(el('p', { class: 'description' }, product.description));
 
-  launchEl.appendChild(el('p', { class: 'go-back' }, el('a', { href: '/' }, 'Til baka')));
+  // productEl.appendChild(el('p', { class: 'go-back' }, el('a', { href: '/' }, 'Til baka')));
 
-  return launchEl;
+  return productEl;
 }
 
 /**
@@ -185,17 +190,17 @@ export async function renderDetails(parentElement, id) {
 
   /* Setja loading state og sækja gögn */
   setLoading(parentElement);
-  const result = await getLaunch(id);
+  const result = await getProducts(id);
   setNotLoading(parentElement);
 
   // Tómt og villu state, við gerum ekki greinarmun á þessu tvennu, ef við
   // myndum vilja gera það þyrftum við að skilgreina stöðu fyrir niðurstöðu
   if (!result) {
-    parentElement.appendChild(el('p', {}, 'Ekkert geimskot fannst.'));
+    parentElement.appendChild(el('p', {}, 'Engin vara fannst.'));
     return;
   }
 
   /* Útfæra ef gögn */
-  parentElement.appendChild(createLaunch(result));
+  parentElement.appendChild(createProduct(result));
 
 }
