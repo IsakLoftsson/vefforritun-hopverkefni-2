@@ -1,4 +1,4 @@
-import { renderDetails, renderFrontpage, searchAndRender } from './lib/ui.js';
+import { renderDetails, renderFrontpage, renderCategory, searchAndRender } from './lib/ui.js';
 
 /**
  * Fall sem keyrir við leit.
@@ -24,7 +24,7 @@ async function onSearch(e) {
 
 /**
  * Athugar hvaða síðu við erum á út frá query-string og birtir.
- * Ef `id` er gefið er stakt geimskot birt, annars er forsíða birt með
+ * Ef `id` er gefið er staka vara birt, annars er forsíða birt með
  * leitarniðurstöðum ef `query` er gefið.
  */
 function route() {
@@ -33,17 +33,16 @@ function route() {
 
   const id = qs.get('id');
   const query = qs.get('query') ?? undefined;
+  const category = qs.get('category') ?? undefined;
 
   const parentElement = document.body;
 
   if (id) {
     renderDetails(parentElement, id);
   } else if (query) {
-    console.log('query render page vantar. Þarf að búa til:', query);
+    renderCategory(parentElement, onSearch, query)
   } else {
-    renderFrontpage(parentElement); //, onSearch, query);
-    // hægt að gera svona líka:
-    // renderFrontpage(document.querySelector('nafn á elementi í HTML'), onSearch, query);
+    renderFrontpage(parentElement);
   }
 }
 

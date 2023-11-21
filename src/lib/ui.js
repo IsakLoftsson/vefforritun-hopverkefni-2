@@ -1,4 +1,4 @@
-import { getProducts, getProductsFrontPage, searchProducts } from './api.js';
+import { getProducts, getProductsFrontPage, getCategories, searchProducts } from './api.js';
 import { el } from './elements.js';
 
 /**
@@ -137,11 +137,7 @@ export async function searchAndRender(parentElement, searchForm, query) {
  * @param {(e: SubmitEvent) => void} searchHandler Fall sem keyrt er þegar leitað er.
  * @param {string | undefined} query Leitarorð, ef eitthvað, til að sýna niðurstöður fyrir.
  */
-export function renderCategory(
-  parentElement,
-  searchHandler,
-  query = undefined,
-) {
+export function renderCategory( parentElement, searchHandler, query = undefined) {
   const heading = el('h1', { class: 'heading', 'data-foo': 'bar' }, 'Clothing..');
   const searchForm = renderSearchForm(searchHandler, query);
   const container = el('main', {}, heading, searchForm);
@@ -162,22 +158,40 @@ export function renderCategory(
  */
 export async function renderFrontpage(parentElement) {
   const heading = el('h1', { class: 'heading', 'data-foo': 'bar' }, 'Nýjar vörur');
-  const container = el('main', {}, heading);
-  parentElement.appendChild(container);
+  const productContainer = el('main', {}, heading);
   parentElement.appendChild(heading);
+  parentElement.appendChild(productContainer);
 
-  // Í staðinn fyrir að nota renderDetails.
+  /**** Birta vörur á frontpage ****/
   const result = await getProductsFrontPage();
   //console.log('renderFrontPage: result:', result);
   const items = result.items;
   //console.log('renderFrontPage: items:', items);
   items.forEach(item => {
     //console.log('renderFrontPage: item:', item);
-    parentElement.appendChild(createProductFrontPage(item));
+    productContainer.appendChild(createProductFrontPage(item));
   });
-  
-  
-  //parentElement.appendChild(createProductFrontPage());
+
+  /**** Birta 'Skoða alla flokka' takka á frontpage ****/
+  const addToCartButton = el('button', { class: 'skoda-flokka-button' }, 'Skoða alla flokka');
+  addToCartButton.addEventListener('click', () => {
+    console.log(`Takki virkar!`);
+  });
+  parentElement.appendChild(addToCartButton);
+
+  /****  Birta flokka á frontpage ****/
+  const categoryContainer = el('div', { class: 'category-container' });
+  const heading2 = el('h1', { class: 'heading2', 'data-foo': 'bar' }, 'Skoðaðu vöruflokkana okkar');
+  parentElement.appendChild(heading2);
+  parentElement.appendChild(categoryContainer);
+
+  const categoryResult = await getCategories();
+  const categories = categoryResult.categories;
+  categories.forEach(category => {
+    categoryContainer.appendChild(createCategoryFrontPage(category));
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
 }
 
 
@@ -206,20 +220,44 @@ export function createProduct(product) {
  * @returns Element sem inniheldur öll gögn um vöru.
  */
 export function createProductFrontPage(product) {
+  console.log('createProductFrontPage: product:', product);
   const productEl = el('div', { class: 'front-page-site' });
-  if (product.image) {
-    productEl.appendChild(el('img', { class: 'product-image', src: product.image }));
-  }
-  productEl.appendChild(el('p', { class: 'product-title' }, product.title));
-  productEl.appendChild(el('p', { class: 'category_title' }, `Flokkur: ${product.category_title}`));
-  productEl.appendChild(el('p', { class: 'price' }, `Verð: ${product.price} kr.-`));
+  const imageElement = el('img', { src: product.image, alt: 'Product Image' });
+  const linkElement = el('a', { href: `/?id=${product.id}` }, imageElement);
+  const resultElement = el('li', { class: 'result' },
+    el('span', { class: 'image' }, linkElement),
+    el('a', { class: 'title' }, product.title),
+    el('a', { class: 'price' }, product.price),
+    el('a', { class: 'kr'}, 'kr.-'),
+    el('a', { class: 'category_title', href: `/category/id=${product.category_id}`}, product.category_title),
+  );
+  productEl.appendChild(resultElement);
+
   return productEl;
 }
 
 /**
- * Sýna geimskot.
- * @param {HTMLElement} parentElement Element sem á að innihalda geimskot.
- * @param {string} id Auðkenni geimskots.
+ * Útbýr element fyrir öll gögn um category í FrontPage. Birtir titil á category fyrir öll category sem eru til.
+ * staðar (ekki tóm fylki) og birtir þau.
+ * @param {object} category Gögn fyrir vöru sem á að birta.
+ * @returns Element sem inniheldur öll gögn um vöru.
+ */
+export function createCategoryFrontPage(category) {
+  console.log('createCategoryFrontPage: category:', category);
+  const categoryEl = el('div', { class: 'front-page-site' });
+  const linkElement = el('a', { href: `/products?limit=12&category=${category.id}` }, category.title);
+  const resultElement = el('li', { class: 'result' },
+    el('a', { class: 'title' }, linkElement),
+  );
+  categoryEl.appendChild(resultElement);
+
+  return categoryEl;
+}
+
+/**
+ * Sýna vöru.
+ * @param {HTMLElement} parentElement Element sem á að innihalda vöru.
+ * @param {string} id Auðkenni vöru.
  */
 export async function renderDetails(parentElement, id) {
   const container = el('main', {});

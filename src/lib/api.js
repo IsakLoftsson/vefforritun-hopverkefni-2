@@ -43,9 +43,9 @@ export async function sleep(ms) {
 }
 
 /**
- * Leita í geimskota API eftir leitarstreng.
+ * Leita í vöru API eftir leitarstreng.
  * @param {string} query Leitarstrengur.
- * @returns {Promise<Launch[] | null>} Fylki af geimskotum eða `null` ef villa
+ * @returns {Promise<Launch[] | null>} Fylki af vörum eða `null` ef villa
  *  kom upp.
  */
 export async function searchProducts(query) {
@@ -135,4 +135,26 @@ export async function getProductsFrontPage() {
   };
 }
 
+/**
+ * Skilar vörum fyrir frontpage eða `null` ef ekkert fannst.
+ * @returns {Promise<LaunchDetail | null>} Vara.
+ */
+export async function getCategories() {
+  const url = new URL(`categories?limit=12`, API_URL);
+  url.searchParams.set('mode', 'list');
+  console.log('url:', url);
+  const result = await queryApi(url);
+  console.log('getProductFrontPage: result:', result);
+
+  const categories = result.items;
+  console.log('result.categories:', categories);
+
+  if (!result) {
+    return null;
+  }
+
+  return {
+    categories
+  };
+}
 
