@@ -86,16 +86,16 @@ export async function searchProducts(query) {
 }
 
 /**
- * Skilar stöku geimskoti eftir auðkenni eða `null` ef ekkert fannst.
- * @param {string} id Auðkenni geimskots.
- * @returns {Promise<LaunchDetail | null>} Geimskot.
+ * Skilar stakri vöru eftir auðkenni eða `null` ef ekkert fannst.
+ * @param {string} id Auðkenni vöru.
+ * @returns {Promise<LaunchDetail | null>} Vara.
  */
 export async function getProducts(id) {
-  // console.log('id:', id);
+  console.log('id:', id);
   const url = new URL(`products/${id}`, API_URL);
-  // console.log('url:', url);
+  console.log('url:', url);
   const result = await queryApi(url);
-  // console.log('result:', result);
+  console.log('result:', result);
 
   if (!result) {
     return null;
@@ -111,3 +111,28 @@ export async function getProducts(id) {
     category_title: result.category_title ?? ''
   };
 }
+
+/**
+ * Skilar vörum fyrir frontpage eða `null` ef ekkert fannst.
+ * @returns {Promise<LaunchDetail | null>} Vara.
+ */
+export async function getProductsFrontPage() {
+  const url = new URL(`products?limit=6`, API_URL);
+  url.searchParams.set('mode', 'list');
+  //console.log('url:', url);
+  const result = await queryApi(url);
+  //console.log('getProductFrontPage: result:', result);
+
+  const items = result.items;
+  //console.log('result.items:', result.items);
+
+  if (!result) {
+    return null;
+  }
+
+  return {
+    items
+  };
+}
+
+

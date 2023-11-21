@@ -38,8 +38,10 @@ function route() {
 
   if (id) {
     renderDetails(parentElement, id);
+  } else if (query) {
+    console.log('query render page vantar. Þarf að búa til:', query);
   } else {
-    renderFrontpage(parentElement, onSearch, query);
+    renderFrontpage(parentElement); //, onSearch, query);
     // hægt að gera svona líka:
     // renderFrontpage(document.querySelector('nafn á elementi í HTML'), onSearch, query);
   }

@@ -1,4 +1,4 @@
-import { getProducts, searchProducts } from './api.js';
+import { getProducts, getProductsFrontPage, searchProducts } from './api.js';
 import { el } from './elements.js';
 
 /**
@@ -132,12 +132,12 @@ export async function searchAndRender(parentElement, searchForm, query) {
 }
 
 /**
- * Sýna forsíðu, hugsanlega með leitarniðurstöðum.
+ * Sýna category, með leit.
  * @param {HTMLElement} parentElement Element sem á að innihalda forsíðu.
  * @param {(e: SubmitEvent) => void} searchHandler Fall sem keyrt er þegar leitað er.
  * @param {string | undefined} query Leitarorð, ef eitthvað, til að sýna niðurstöður fyrir.
  */
-export function renderFrontpage(
+export function renderCategory(
   parentElement,
   searchHandler,
   query = undefined,
@@ -154,6 +154,32 @@ export function renderFrontpage(
   searchAndRender(parentElement, searchForm, query);
 }
 
+/**
+ * Sýna forsíðu, hugsanlega með leitarniðurstöðum.
+ * @param {HTMLElement} parentElement Element sem á að innihalda forsíðu.
+ * @param {(e: SubmitEvent) => void} searchHandler Fall sem keyrt er þegar leitað er.
+ * @param {string | undefined} query Leitarorð, ef eitthvað, til að sýna niðurstöður fyrir.
+ */
+export async function renderFrontpage(parentElement) {
+  const heading = el('h1', { class: 'heading', 'data-foo': 'bar' }, 'Nýjar vörur');
+  const container = el('main', {}, heading);
+  parentElement.appendChild(container);
+  parentElement.appendChild(heading);
+
+  // Í staðinn fyrir að nota renderDetails.
+  const result = await getProductsFrontPage();
+  //console.log('renderFrontPage: result:', result);
+  const items = result.items;
+  //console.log('renderFrontPage: items:', items);
+  items.forEach(item => {
+    //console.log('renderFrontPage: item:', item);
+    parentElement.appendChild(createProductFrontPage(item));
+  });
+  
+  
+  //parentElement.appendChild(createProductFrontPage());
+}
+
 
 /**
  * Útbýr element fyrir öll gögn um vöru. Birtir titil fyrir þau gögn sem eru til
@@ -164,17 +190,29 @@ export function renderFrontpage(
 export function createProduct(product) {
   const productEl = el('div', { class: 'product-site' },
     el('h1', { class: 'product-title' }, product.title));
-  
   if (product.image) {
     productEl.appendChild(el('img', { class: 'product-image', src: product.image }));
   }
-  
   productEl.appendChild(el('p', { class: 'category_title' }, `Flokkur: ${product.category_title}`));
   productEl.appendChild(el('p', { class: 'price' }, `Verð: ${product.price} kr.-`));
   productEl.appendChild(el('p', { class: 'description' }, product.description));
+  return productEl;
+}
 
-  // productEl.appendChild(el('p', { class: 'go-back' }, el('a', { href: '/' }, 'Til baka')));
-
+/**
+ * Útbýr element fyrir öll gögn um vöru í FrontPage. Birtir titil fyrir þau gögn sem eru til
+ * staðar (ekki tóm fylki) og birtir þau.
+ * @param {object} product Gögn fyrir vöru sem á að birta.
+ * @returns Element sem inniheldur öll gögn um vöru.
+ */
+export function createProductFrontPage(product) {
+  const productEl = el('div', { class: 'front-page-site' });
+  if (product.image) {
+    productEl.appendChild(el('img', { class: 'product-image', src: product.image }));
+  }
+  productEl.appendChild(el('p', { class: 'product-title' }, product.title));
+  productEl.appendChild(el('p', { class: 'category_title' }, `Flokkur: ${product.category_title}`));
+  productEl.appendChild(el('p', { class: 'price' }, `Verð: ${product.price} kr.-`));
   return productEl;
 }
 
