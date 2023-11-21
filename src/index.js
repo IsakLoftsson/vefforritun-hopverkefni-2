@@ -1,4 +1,4 @@
-import { renderDetails, renderFrontpage, renderCategory, searchAndRender } from './lib/ui.js';
+import { renderDetails, renderFrontpage, renderSearch, renderCategory, searchAndRender } from './lib/ui.js';
 
 /**
  * Fall sem keyrir við leit.
@@ -19,7 +19,7 @@ async function onSearch(e) {
   }
 
   await searchAndRender(document.body, e.target, value);
-  window.history.pushState({}, '', `/?query=${value}`);
+  window.history.pushState({}, '', `/?search=${value}`);
 }
 
 /**
@@ -30,17 +30,23 @@ async function onSearch(e) {
 function route() {
   const { search } = window.location;
   const qs = new URLSearchParams(search);
+  console.log('qs:', qs);
 
   const id = qs.get('id');
-  const query = qs.get('query') ?? undefined;
+  console.log('id:', id);
+  const query = qs.get('search') ?? undefined;
+  console.log('search:', query);
   const category = qs.get('category') ?? undefined;
+  console.log('category:', category);
 
   const parentElement = document.body;
 
   if (id) {
     renderDetails(parentElement, id);
   } else if (query) {
-    renderCategory(parentElement, onSearch, query)
+    renderSearch(parentElement, onSearch, query)
+  } else if (category) {
+    renderCategory(parentElement, onSearch, category)
   } else {
     renderFrontpage(parentElement);
   }

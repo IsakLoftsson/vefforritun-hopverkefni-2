@@ -91,11 +91,11 @@ export async function searchProducts(query) {
  * @returns {Promise<LaunchDetail | null>} Vara.
  */
 export async function getProducts(id) {
-  console.log('id:', id);
+  //console.log('id:', id);
   const url = new URL(`products/${id}`, API_URL);
-  console.log('url:', url);
+  //console.log('url:', url);
   const result = await queryApi(url);
-  console.log('result:', result);
+  //console.log('result:', result);
 
   if (!result) {
     return null;
@@ -158,3 +158,44 @@ export async function getCategories() {
   };
 }
 
+/**
+ * Skilar vörum fyrir frontpage eða `null` ef ekkert fannst.
+ * @returns {Promise<LaunchDetail | null>} Vara.
+ */
+export async function getProductsByCategory(category_id) {
+  const url = new URL(`products?limit=12&category=${category_id}`, API_URL);
+  url.searchParams.set('mode', 'list');
+  console.log('getProductsByCategory: url:', url);
+  const result = await queryApi(url);
+  console.log('getProductsByCategory: result:', result);
+
+  const items = result.items;
+  console.log('getProductsByCategory: result.items:', result.items);
+
+  if (!result) {
+    return null;
+  }
+
+  return {
+    items
+  };
+}
+
+/**
+ * Skilar vörum fyrir frontpage eða `null` ef ekkert fannst.
+ * @returns {Promise<LaunchDetail | null>} Vara.
+ */
+export async function getCategoryNameById(category_id) {
+  const url = new URL(`categories/${category_id}`, API_URL);
+  //console.log('getCategoryNameById: url:', url);
+  const result = await queryApi(url);
+  //console.log('getCategoryNameById: result:', result);
+  const name = result.title;
+  //console.log('getCategoryNameById: result.title:', result.title);
+  if (!result) {
+    return null;
+  }
+  return {
+    name
+  };
+}
