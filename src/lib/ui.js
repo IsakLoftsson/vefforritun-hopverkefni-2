@@ -257,10 +257,21 @@ export function createProductFrontPage(product) {
   const linkElement = el('a', { href: `/?id=${product.id}` }, imageElement);
   const resultElement = el('li', { class: 'result' },
     el('span', { class: 'image' }, linkElement),
-    el('a', { class: 'title' }, product.title),
+    el('div', { class: 'content' },
+
+    el('div', { class: 'priceAndKr' },
+
     el('a', { class: 'price' }, product.price),
     el('a', { class: 'kr'}, 'kr.-'),
-    el('a', { class: 'category_title', href: `/?category=${product.category_id}`}, product.category_title),
+  ),
+  el('div', { class: 'titleAndCata' },
+
+  el('a', { class: 'title' }, product.title),
+  el('a', { class: 'category_title', href: `/?category=${product.category_id}`}, product.category_title),
+  ),
+    ),
+    
+    
   );
   productEl.appendChild(resultElement);
 
