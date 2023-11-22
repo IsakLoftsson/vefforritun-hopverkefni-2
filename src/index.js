@@ -36,7 +36,7 @@ async function onSearch(e) {
  */
 function route() {
   const { search } = window.location;
-  
+
   const qs = new URLSearchParams(search);
   console.log('qs:', qs);
 
@@ -53,6 +53,11 @@ function route() {
   // hreinsum það sem var í main element til að undirbúa fyrir nýja síðu, eða sömu síðu
   if (main) {
     main.remove();
+  }
+
+  const categoryProducts = document.querySelector('category-products');
+  if (categoryProducts) {
+    categoryProducts.remove();
   }
 
   if (id) {

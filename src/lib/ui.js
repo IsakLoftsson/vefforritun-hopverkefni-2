@@ -168,7 +168,7 @@ export async function renderCategory( parentElement, searchHandler, category = u
   }
 
   /**** Birta vörur eftir flokki á frontpage ****/
-  const productContainer = el('category_products', {}, );
+  const productContainer = el('category-products', {}, );
   parentElement.appendChild(productContainer);
   
   const result = await getProductsByCategory(category);
