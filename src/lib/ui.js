@@ -106,7 +106,8 @@ function createSearchResults(results, query) {
  * @param {Element} searchForm Form sem á að gera óvirkt.
  * @param {string} query Leitarstrengur.
  */
-export async function searchAndRender(parentElement, searchForm, query) {
+export async function searchAndRender(parentElement, searchForm, query, category = undefined) {
+  console.log('searchAndRender: category:', category);
   const mainElement = parentElement.querySelector('main');
 
   if (!mainElement) {
@@ -121,8 +122,8 @@ export async function searchAndRender(parentElement, searchForm, query) {
   }
 
   setLoading(mainElement, searchForm);
-  const results = await searchProducts(query);
-  console.log('searchAndRender: results:', results);
+  const results = await searchProducts(query, category);
+  console.log('searchAndRender: results from searchProducts:', results);
   setNotLoading(mainElement, searchForm);
 
   const resultsEl = createSearchResults(results, query);
@@ -137,15 +138,17 @@ export async function searchAndRender(parentElement, searchForm, query) {
  * @param {(e: SubmitEvent) => void} searchHandler Fall sem keyrt er þegar leitað er.
  * @param {string | undefined} query Leitarorð, ef eitthvað, til að sýna niðurstöður fyrir.
  */
-export function renderSearch( parentElement, searchHandler, query = undefined) {
-  const heading = el('h1', { class: 'heading', 'data-foo': 'bar' }, 'Clothing..');
+export async function renderSearch( parentElement, searchHandler, query = undefined, category = undefined) {
+  console.log('renderSearch: category:', category);
+  const categoryName = await getCategoryNameById(category)
+  const heading = el('h1', { class: 'heading', 'data-foo': 'bar' }, categoryName.name);
   const searchForm = renderSearchForm(searchHandler, query);
   const container = el('main', {}, heading, searchForm);
   parentElement.appendChild(container);
   if (!query) {
     return;
   }
-  searchAndRender(parentElement, searchForm, query);
+  searchAndRender(parentElement, searchForm, query, category);
 }
 
 /**
@@ -176,8 +179,6 @@ export async function renderCategory( parentElement, searchHandler, category = u
     //console.log('renderFrontPage: item:', item);
     productContainer.appendChild(createProductFrontPage(item));
   });
-
-  
 }
 
 /**

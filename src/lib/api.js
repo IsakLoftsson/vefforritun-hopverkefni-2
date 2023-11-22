@@ -48,16 +48,20 @@ export async function sleep(ms) {
  * @returns {Promise<Launch[] | null>} Fylki af vörum eða `null` ef villa
  *  kom upp.
  */
-export async function searchProducts(query) {
+export async function searchProducts(query, category) {
+  console.log('searchProducts: category:', category);
   const url = new URL('products', API_URL);
-  console.log('searchProducts: url:', url);
   url.searchParams.set('search', query);
   url.searchParams.set('mode', 'list');
+  // url.searchParams.set('limit', 12);
+  // url.searchParams.set('offset', 0);
+  url.searchParams.set('category', category);
+  console.log('searchProducts: category:', category);
 
   let response;
   try {
     response = await fetch(url);
-    console.log('response úr fetch:', response);
+    console.log('searchProducts: response úr fetch:', response);
   } catch (e) {
     console.error('Villa kom upp við að sækja gögn');
     return null;

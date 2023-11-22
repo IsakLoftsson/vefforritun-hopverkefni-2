@@ -6,6 +6,7 @@ import { renderDetails, renderFrontpage, renderSearch, renderCategory, searchAnd
  * @returns {Promise<void>}
  */
 async function onSearch(e) {
+  console.log('onSearch: e:', e);
   e.preventDefault();
 
   if (!e.target || !(e.target instanceof Element)) {
@@ -18,8 +19,14 @@ async function onSearch(e) {
     return;
   }
 
+  const { search } = window.location;
+  const qs = new URLSearchParams(search);
+  const category = qs.get('category') ?? undefined;
+  console.log('onSearch: category:', category);
+
   await searchAndRender(document.body, e.target, value);
-  window.history.pushState({}, '', `/?search=${value}`);
+  window.history.pushState({}, '', `/?category=${category}&search=${value}`);
+  route();
 }
 
 /**
@@ -29,24 +36,31 @@ async function onSearch(e) {
  */
 function route() {
   const { search } = window.location;
+  
   const qs = new URLSearchParams(search);
   console.log('qs:', qs);
 
   const id = qs.get('id');
-  console.log('id:', id);
+  console.log('route(): id:', id);
   const query = qs.get('search') ?? undefined;
-  console.log('search:', query);
+  console.log('route(): search:', query);
   const category = qs.get('category') ?? undefined;
-  console.log('category:', category);
+  console.log('route(): category:', category);
 
   const parentElement = document.body;
+  // finnum main html elementið
+  const main = document.querySelector('main');
+  // hreinsum það sem var í main element til að undirbúa fyrir nýja síðu, eða sömu síðu
+  if (main) {
+    main.remove();
+  }
 
   if (id) {
     renderDetails(parentElement, id);
-  } else if (query) {
-    renderSearch(parentElement, onSearch, query)
-  } else if (category) {
-    renderCategory(parentElement, onSearch, category)
+  } else if (category && !query) {
+    renderCategory(parentElement, onSearch, category);
+  } else if (category && query) {
+    renderSearch(parentElement, onSearch, query, category);
   } else {
     renderFrontpage(parentElement);
   }
@@ -54,7 +68,7 @@ function route() {
 
 // Bregst við því þegar við notum vafra til að fara til baka eða áfram.
 window.onpopstate = () => {
-  // route(); // ?????????????
+  route();
 };
 
 // Athugum í byrjun hvað eigi að birta.
