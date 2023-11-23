@@ -161,7 +161,7 @@ export async function renderCategory( parentElement, searchHandler, category = u
   const categoryName = await getCategoryNameById(category)
   const heading = el('h1', { class: 'heading', 'data-foo': 'bar' }, categoryName.name);
   const searchForm = renderSearchForm(searchHandler, '');
-  const container = el('main', {}, heading, searchForm);
+  const container = el('headerAndSearch', {}, heading, searchForm);
   parentElement.appendChild(container);
   if (!category) {
     return;
@@ -189,7 +189,7 @@ export async function renderCategory( parentElement, searchHandler, category = u
  */
 export async function renderFrontpage(parentElement) {
   const heading = el('h1', { class: 'heading', 'data-foo': 'bar' }, 'Nýjar vörur');
-  const productContainer = el('main', {}, heading);
+  const productContainer = el('category-products', {}, heading);
   parentElement.appendChild(heading);
   parentElement.appendChild(productContainer);
 
@@ -233,14 +233,21 @@ export async function renderFrontpage(parentElement) {
  * @returns Element sem inniheldur öll gögn um vöru.
  */
 export function createProduct(product) {
-  const productEl = el('div', { class: 'product-site' },
-    el('h1', { class: 'product-title' }, product.title));
+  const productEl = el('div', { class: 'product-site' },);
   if (product.image) {
     productEl.appendChild(el('img', { class: 'product-image', src: product.image }));
   }
-  productEl.appendChild(el('p', { class: 'category_title' }, `Flokkur: ${product.category_title}`));
-  productEl.appendChild(el('p', { class: 'price' }, `Verð: ${product.price} kr.-`));
-  productEl.appendChild(el('p', { class: 'description' }, product.description));
+  const productInfo =   el('div', { class: 'info-Container' })
+
+  productEl.appendChild(productInfo);
+
+  productInfo.appendChild(el('h1', { class: 'product-title' }, product.title))
+
+  const categoryAndPrice = el('div', { class: 'categoryAndPrice' })
+  productInfo.appendChild(categoryAndPrice);
+  categoryAndPrice.appendChild(el('p', { class: 'category_title' }, `Flokkur: ${product.category_title}`));
+  categoryAndPrice.appendChild(el('p', { class: 'price' }, `Verð: ${product.price} kr.-`));
+  productInfo.appendChild(el('p', { class: 'description' }, product.description));
   return productEl;
 }
 
