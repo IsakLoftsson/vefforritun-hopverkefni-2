@@ -45,6 +45,7 @@ h1 {
   margin-block-end: var(--spacing);
   font-weight: 800;
   align-self: flex-start;
+  margin-left: 15px;
 }
 
 h2 {
