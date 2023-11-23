@@ -44,6 +44,7 @@ h1 {
   font-size: 2.5rem;
   margin-block-end: var(--spacing);
   font-weight: 800;
+  align-self: flex-start;
 }
 
 h2 {
@@ -213,6 +214,7 @@ button {
   background-color: black;
   color: white;
   border-radius: 5px;
+  align-self: flex-start;
 }
 
 body {
