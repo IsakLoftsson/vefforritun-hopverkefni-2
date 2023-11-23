@@ -46,6 +46,8 @@ function route() {
   console.log('route(): search:', query);
   const category = qs.get('category') ?? undefined;
   console.log('route(): category:', category);
+  const categories = qs.get('categories') ?? undefined;
+  console.log('route(): categories:', categories);
 
   const parentElement = document.body;
   // finnum main html elementið
@@ -66,6 +68,8 @@ function route() {
     renderCategory(parentElement, onSearch, category);
   } else if (category && query) {
     renderSearch(parentElement, onSearch, query, category);
+  } else if (categories) {
+    renderCategory(parentElement, onSearch, category);
   } else {
     renderFrontpage(parentElement);
   }
