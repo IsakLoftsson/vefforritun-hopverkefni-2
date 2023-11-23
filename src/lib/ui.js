@@ -242,9 +242,11 @@ export function createProduct(product) {
   productEl.appendChild(productInfo);
 
   productInfo.appendChild(el('h1', { class: 'product-title' }, product.title))
-  
-  productInfo.appendChild(el('p', { class: 'category_title' }, `Flokkur: ${product.category_title}`));
-  productInfo.appendChild(el('p', { class: 'price' }, `Verð: ${product.price} kr.-`));
+
+  const categoryAndPrice = el('div', { class: 'categoryAndPrice' })
+  productInfo.appendChild(categoryAndPrice);
+  categoryAndPrice.appendChild(el('p', { class: 'category_title' }, `Flokkur: ${product.category_title}`));
+  categoryAndPrice.appendChild(el('p', { class: 'price' }, `Verð: ${product.price} kr.-`));
   productInfo.appendChild(el('p', { class: 'description' }, product.description));
   return productEl;
 }
