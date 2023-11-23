@@ -161,7 +161,7 @@ export async function renderCategory( parentElement, searchHandler, category = u
   const categoryName = await getCategoryNameById(category)
   const heading = el('h1', { class: 'heading', 'data-foo': 'bar' }, categoryName.name);
   const searchForm = renderSearchForm(searchHandler, '');
-  const container = el('main', {}, heading, searchForm);
+  const container = el('headerAndSearch', {}, heading, searchForm);
   parentElement.appendChild(container);
   if (!category) {
     return;
@@ -189,7 +189,7 @@ export async function renderCategory( parentElement, searchHandler, category = u
  */
 export async function renderFrontpage(parentElement) {
   const heading = el('h1', { class: 'heading', 'data-foo': 'bar' }, 'Nýjar vörur');
-  const productContainer = el('main', {}, heading);
+  const productContainer = el('category-products', {}, heading);
   parentElement.appendChild(heading);
   parentElement.appendChild(productContainer);
 

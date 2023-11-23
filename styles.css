@@ -58,6 +58,14 @@ main {
   max-width: var(--max-width);
   width: 100%;
 }
+
+category-products{
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  max-width: var(--max-width);
+  width: 100%;
+
+}
 .front-page-site {
   grid-column: span 4;
   display: flex;
@@ -170,8 +178,31 @@ header {
 
 /* header end*/ 
 
+/* allarvorur title */
+headerAndSearch {
+  display: flex;
+  align-self: flex-start;
+  flex-direction: column;
+  padding-left: 12px;
+
+}
+form label{
+  padding-right: 10px;
+  
+}
+/*end*/
+
+/* vorur */
+product-site{
+  display: flex;
+}
+/*end*/
+
 button {
   margin-left: var(--spacing);
+  background-color: black;
+  color: white;
+  border-radius: 5px;
 }
 
 body {
