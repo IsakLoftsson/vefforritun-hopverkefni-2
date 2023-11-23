@@ -16,13 +16,10 @@ html {
 
 :root {
   --spacing: 1rem;
-  --max-width: 56rem;
-  --font-family: -system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-}
-
-img {
-  max-width: 100%;
+  --max-width: 100%;
+  --font-family: -system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  --header-color: #222222;
 }
 
 html {
@@ -35,7 +32,7 @@ button {
   font-size: inherit;
 }
 
-input[type='number'] {
+input[type="number"] {
   padding-inline-start: calc(var(--spacing) / 2);
 }
 
@@ -54,28 +51,128 @@ h2 {
   font-size: 1.7rem;
   font-weight: 700;
 }
-
+/* Nyjar vorur - title */
 main {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  max-width: var(--max-width);
+  width: 100%;
+}
+.front-page-site {
+  grid-column: span 4;
+  display: flex;
+}
+.front-page-site .result {
+  width: 100%;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing);
-  width: 50%;
-  margin: var(--spacing) auto;
-  max-width: var(--max-width);
+  flex-wrap: wrap;
+  padding: 1em;
+}
+.front-page-site .result .image {
+  width: 100%;
+  height: 188px;
+}
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.content{
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+}
+.priceAndKr{
+  display: flex;
+  flex-direction: row;
+  justify-content: stretch;
+}
+.titleAndCata{
+  display: flex;
+  flex-direction: column;
 }
 
+.titleAndCata .title {
+  font-weight: bold;
+}
+.titleAndCata .category_title{
+  text-decoration: none;
+  color: black;
+}
+
+/* End */
+
+/* voruflokkar */
+
+.category-container {
+  display: grid;
+  grid-template-columns: repeat(12, 4fr);
+  width: 100%;
+}
+
+.category-container .front-page-site .result .title a{
+  text-decoration: none;
+  color: black;
+  font-size: 50px;
+  
+}
+.category-container .front-page-site .result .title {
+  
+  text-align: center;
+}
+.category-container .front-page-site{
+  border: solid 1px black;
+  margin: 10px;
+  padding-top: 25px;
+  padding-bottom: 25px;
+
+}
+
+/* end */
 /* TODO nánari stílar */
 
-main {
-  display: flex;
-  align-items: center;
+/* Header */ 
+
+header {
+  background-color: var(--header-color);
+  width: var(--max-width);
+  display: block;
+  justify-content: space-between;
+  padding: 10px;
 }
+
+.navigation {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.vefforritunarbudin {
+  margin-right: auto;
+}
+.vefforritunarbudin a {
+  text-decoration: none;
+  color: white;
+}
+
+.nav-ul {
+  display: flex;
+  list-style: none;
+  align-items: flex-end;
+}
+
+.nav-ul a {
+  margin-right: 15px;
+  text-decoration: none;
+  color: white;
+}
+
+/* header end*/ 
 
 button {
   margin-left: var(--spacing);
 }
-
-
 
 body {
   gap: var(--spacing);
@@ -85,7 +182,7 @@ body {
   justify-content: center;
 }
 
-.results {  
+/*.results {
   flex-direction: column;
   gap: var(--spacing);
   list-style: none;
@@ -95,7 +192,7 @@ body {
 
 .results li {
   padding-top: var(--spacing);
-}
+}*/
 
 .mission {
   display: flex;
@@ -104,11 +201,11 @@ body {
 }
 
 .mission h3 {
-  padding-right: calc(var(--spacing)/2);
+  padding-right: calc(var(--spacing) / 2);
   font-size: 17px;
 }
 
-.launch-title{
+.launch-title {
   display: flex;
   justify-content: center;
 }
@@ -129,14 +226,14 @@ p {
 
 .go-back {
   padding-top: var(--spacing);
-  padding-bottom: calc(var(--spacing)*3);
+  padding-bottom: calc(var(--spacing) * 3);
 }
 
 a {
   font-size: 17px;
 }
 
-.result {
+/*.result {
   list-style: none;
   display: flex;
   flex-direction: column;
@@ -144,4 +241,4 @@ a {
 
 .result img {
   width: 50%;
-}
+}*/
