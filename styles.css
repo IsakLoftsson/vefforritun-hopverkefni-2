@@ -320,7 +320,9 @@ a {
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 500px) {
+
+ 
   .vefforritunarbudin a {
     font-size: 1.2rem;
   }
@@ -329,17 +331,75 @@ a {
     padding: 15px;
   }
 
-  .category-container .front-page-site .result .title a {
-    font-size: 4vw;
-    font-weight: 800;
+  .category-container .front-page-site .result .title a, .category-products .result .title a {
+    font-size: 5vw;
+    font-weight: bold;
+  }
 
+  .category-container .front-page-site .result .image, 
+  .category-products .result .image {
+    width: 100%;
+    height: auto;
   }
 
   main, .category-products, .category-container {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
+  }
+
+  .category-container, .category-products, .front-page-site {
+    grid-template-columns: 1fr;
   }
 
   .front-page-site {
+    grid-column: 1/-1;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+
+  .front-page-site .result {
+    width: 100%;
+  }
+
+  .front-page-site .result .image {
+    width: 100%;
+    height: auto;
+  }
+
+  .front-page-site .result .title a {
+    font-size: 5vw;
+    font-weight: 800;
+  }
+
+  .front-page-site .result .content {
+    flex-direction: column;
+  }
+
+
+  .category-products {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: var(--spacing);
+    width: 100%;
+    max-width: var(--max-width);
+  }
+
+  .category-container, .category-products {
+    grid-template-columns: 1fr;
+  }
+
+  .category-products .product-item {
+    width: 100;
+    margin-bottom: var(--spacing);
+  }
+
+  .category-products .product-item img,
+  .front-page-site .result .image {
+    width: 100%;
+    height: auto;
+  }
+
+  .category-products .result {
     grid-column: span 2;
   }
 
@@ -348,17 +408,30 @@ a {
     margin: 0 20px;
   }
 
+  .vefforritunarbudin {
+    order: -1;
+    width: 100%;
+    text-align: center;
+    margin-bottom: var(--spacing);
+  }
+
   .navigation {
     flex-direction: column;
+    align-items: center;
   }
 
   .nav-ul {
+    width: 100%;
     text-align: center;
   }
 
   .nav-ul a {
-    margin-right: 0;
+    text-align: center;
     margin-bottom: var(--spacing);
+  }
+
+  .nav-ul a:last-child {
+    margin-bottom: 0;
   }
 
   button {
