@@ -8,23 +8,21 @@ import { renderDetails, renderFrontpage, renderSearch, renderCategory, searchAnd
 async function onSearch(e) {
   console.log('onSearch: e:', e);
   e.preventDefault();
-
   if (!e.target || !(e.target instanceof Element)) {
     return;
   }
-
   const { value } = e.target.querySelector('input') ?? {};
-
   if (!value) {
     return;
   }
-
+  
   const { search } = window.location;
   const qs = new URLSearchParams(search);
+  // Náum í category úr URL
   const category = qs.get('category') ?? undefined;
   console.log('onSearch: category:', category);
-
   await searchAndRender(document.body, e.target, value);
+  // Setjum inn rétt URL í history með réttum category og value gildum
   window.history.pushState({}, '', `/?category=${category}&search=${value}`);
   route();
 }
@@ -40,6 +38,7 @@ export function route() {
   const qs = new URLSearchParams(search);
   console.log('qs:', qs);
 
+  // Athugum hvort við finnum gildi í URL strengnum
   const id = qs.get('id');
   console.log('route(): id:', id);
   const query = qs.get('search') ?? undefined;
@@ -49,8 +48,8 @@ export function route() {
   const categories = qs.get('categories') ?? undefined;
   console.log('route(): categories:', categories);
 
-  const parentElement = document.body;
   // finnum main html elementið
+  const parentElement = document.body;
   const main = document.querySelector('main');
   // hreinsum það sem var í main element til að undirbúa fyrir nýja síðu, eða sömu síðu
   if (main) {
@@ -81,7 +80,7 @@ export function route() {
   if (checkIfHeading2) {
     checkIfHeading2.remove();
   }
-
+  // Köllum á rétta render fallið sem á við til að birta síðu sem passar við URL
   if (id) {
     renderDetails(parentElement, id);
   } else if (category && !query) {
