@@ -56,10 +56,30 @@ export function route() {
   if (main) {
     main.remove();
   }
-
-  const categoryProducts = document.querySelector('category-products');
-  if (categoryProducts) {
-    categoryProducts.remove();
+  //Fjarlægja fyrri vörur
+  const checkIfProducts = document.querySelector('category-products');
+  if (checkIfProducts) {
+    checkIfProducts.remove();
+  }
+  // Fjarlægja fyrri vöruflokka
+  const checkIfCategories = document.querySelector('.category-container');
+  if (checkIfCategories) {
+    checkIfCategories.remove();
+  }
+  // Fjarlægja takka
+  const checkIfButton = document.querySelector('.skoda-flokka-button');
+  if (checkIfButton) {
+    checkIfButton.remove();
+  }
+  // Fjarlægja heading
+  const checkIfHeading = document.querySelector('.heading');
+  if (checkIfHeading) {
+    checkIfHeading.remove();
+  }
+  // Fjarlægja heading2
+  const checkIfHeading2 = document.querySelector('.heading2');
+  if (checkIfHeading2) {
+    checkIfHeading2.remove();
   }
 
   if (id) {
