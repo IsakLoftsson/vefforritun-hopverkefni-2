@@ -1,4 +1,4 @@
-import { renderDetails, renderFrontpage, renderSearch, renderCategory, searchAndRender } from './lib/ui.js';
+import { renderDetails, renderFrontpage, renderSearch, renderCategory, searchAndRender, renderCategories} from './lib/ui.js';
 
 /**
  * Fall sem keyrir við leit.
@@ -34,7 +34,7 @@ async function onSearch(e) {
  * Ef `id` er gefið er staka vara birt, annars er forsíða birt með
  * leitarniðurstöðum ef `query` er gefið.
  */
-function route() {
+export function route() {
   const { search } = window.location;
 
   const qs = new URLSearchParams(search);
@@ -69,7 +69,7 @@ function route() {
   } else if (category && query) {
     renderSearch(parentElement, onSearch, query, category);
   } else if (categories) {
-    renderCategory(parentElement, onSearch, category);
+    renderCategories(parentElement, onSearch, categories);
   } else {
     renderFrontpage(parentElement);
   }
