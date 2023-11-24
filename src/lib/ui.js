@@ -163,12 +163,7 @@ export async function renderSearch( parentElement, searchHandler, query, categor
  * @param {string} category Flokkur, til að sýna niðurstöður fyrir.
  */
 export async function renderCategories(parentElement, searchHandler, category){
-  const checkIfCategories = document.querySelector('category-container');
-  if (checkIfCategories) {
-    checkIfCategories.remove();
-  }
-
-  /****  Birta flokka á frontpage ****/
+    /****  Birta flokka á flokkasíðu ****/
   const categoryContainer = el('div', { class: 'category-container' });
   const heading2 = el('h1', { class: 'heading2', 'data-foo': 'bar' }, 'Skoðaðu vöruflokkana okkar');
   parentElement.appendChild(heading2);
@@ -264,8 +259,6 @@ export async function renderFrontpage(parentElement) {
   categories.forEach(category => {
     categoryContainer.appendChild(createCategoryFrontPage(category));
   });
-
-  //////////////////////////////////////////////////////////////////////////////
 }
 
 
