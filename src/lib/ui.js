@@ -69,7 +69,7 @@ function setNotLoading(parentElement, searchForm = undefined) {
  * @param {string} query Leitarstrengur.
  */
 function createSearchResults(results, query) {
-  const list = el('ul', { class: 'results' });
+  const list = el('ul', { class: 'category-container' });
   list.appendChild(el('h2', { class: 'results__title' }, `Leitarniðurstöður fyrir: "${query}"`));
 
   if (!results) {
@@ -108,7 +108,7 @@ function createSearchResults(results, query) {
  */
 export async function searchAndRender(parentElement, searchForm, query, category = undefined) {
   console.log('searchAndRender: category:', category);
-  const mainElement = parentElement.querySelector('main');
+  const mainElement = parentElement.querySelector('category-products');
 
   if (!mainElement) {
     console.warn('fann ekki <main> element');
@@ -136,18 +136,24 @@ export async function searchAndRender(parentElement, searchForm, query, category
  * Sýna leit.
  * @param {HTMLElement} parentElement Element sem á að innihalda forsíðu.
  * @param {(e: SubmitEvent) => void} searchHandler Fall sem keyrt er þegar leitað er.
- * @param {string | undefined} query Leitarorð, ef eitthvað, til að sýna niðurstöður fyrir.
+ * @param {string} query Leitarorð, ef eitthvað, til að sýna niðurstöður fyrir.
+ * @param {string} category Flokkur, til að sýna niðurstöður fyrir.
  */
-export async function renderSearch( parentElement, searchHandler, query = undefined, category = undefined) {
+export async function renderSearch( parentElement, searchHandler, query, category) {
   console.log('renderSearch: category:', category);
   const categoryName = await getCategoryNameById(category)
   const heading = el('h1', { class: 'heading', 'data-foo': 'bar' }, categoryName.name);
   const searchForm = renderSearchForm(searchHandler, query);
-  const container = el('main', {}, heading, searchForm);
-  parentElement.appendChild(container);
+  const container = el('headerAndSearch', {}, heading, searchForm);
+  const checkIfContainer = parentElement.querySelector('headerandsearch');
+  if (!checkIfContainer) {
+    parentElement.appendChild(container);
+  }
   if (!query) {
     return;
   }
+  const productContainer = el('category-products', {}, );
+  parentElement.appendChild(productContainer);
   searchAndRender(parentElement, searchForm, query, category);
 }
 
@@ -155,9 +161,9 @@ export async function renderSearch( parentElement, searchHandler, query = undefi
  * Sýna category, með leit.
  * @param {HTMLElement} parentElement Element sem á að innihalda forsíðu.
  * @param {(e: SubmitEvent) => void} searchHandler Fall sem keyrt er þegar leitað er.
- * @param {string | undefined} query Leitarorð, ef eitthvað, til að sýna niðurstöður fyrir.
+ * @param {string} category Flokkur, til að sýna niðurstöður fyrir.
  */
-export async function renderCategory( parentElement, searchHandler, category = undefined) {
+export async function renderCategory( parentElement, searchHandler, category) {
   const categoryName = await getCategoryNameById(category)
   const heading = el('h1', { class: 'heading', 'data-foo': 'bar' }, categoryName.name);
   const searchForm = renderSearchForm(searchHandler, '');
