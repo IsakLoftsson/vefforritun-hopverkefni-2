@@ -82,22 +82,29 @@ header {
         text-align: center;
         margin-bottom: var(--spacing);
       }
+
       .navigation {
         flex-direction: column;
-        align-items: center;
       }
     
       .nav-ul {
-        width: 100%;
-        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
       }
-    
-      .nav-ul a {
-        text-align: center;
+
+      .nav-ul .nav-item {
+        display: flex;
+        flex-direction: column;
         margin-bottom: var(--spacing);
       }
     
-      .nav-ul a:last-child {
+      .nav-ul .nav-item a {
+        margin-right: 0;
+        margin-bottom: var(--spacing);
+      }
+    
+      .nav-ul .nav-item:last-child {
         margin-bottom: 0;
       }
     
