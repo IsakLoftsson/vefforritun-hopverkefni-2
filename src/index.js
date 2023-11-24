@@ -15,7 +15,7 @@ async function onSearch(e) {
   if (!value) {
     return;
   }
-  
+
   const { search } = window.location;
   const qs = new URLSearchParams(search);
   // Náum í category úr URL
@@ -82,14 +82,19 @@ export function route() {
   }
   // Köllum á rétta render fallið sem á við til að birta síðu sem passar við URL
   if (id) {
+    // ef id hefur gildi þá erum við að byðja um ákveðna vöru. Notum renderDetails til að birta þá vöru
     renderDetails(parentElement, id);
   } else if (category && !query) {
+    // ef category hefur gildi en ekki query þá erum við að byðja um ákveðna vöruflokk. Notum renderCategory til að birta þann vöruflokk
     renderCategory(parentElement, onSearch, category);
   } else if (category && query) {
+    // ef category og query hefur gildi þá erum við að leita í ákveðnum vöruflokki. Notum renderSearch til að birta leitarniðurstöður
     renderSearch(parentElement, onSearch, query, category);
   } else if (categories) {
+    // ef categories hefur gildi þá sýnum við alla vöruflokka. Notum renderCategories til að birta alla vöruflokka
     renderCategories(parentElement, onSearch, categories);
   } else {
+    // Ef ekkert af ofantöldu er til staðar þá erum við á forsíðu. Notum renderFrontpage til að birta forsíðu   
     renderFrontpage(parentElement);
   }
 }
