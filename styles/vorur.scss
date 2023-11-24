@@ -1,0 +1,30 @@
+/* allarvorur title */
+headerAndSearch {
+    display: flex;
+    align-self: flex-start;
+    flex-direction: column;
+    padding-left: 12px;
+  
+  }
+  form label{
+    padding-right: 10px;
+    
+  }
+  /*end*/
+  
+  /* vorur */
+  .product-site{
+    display: flex;
+    flex-direction: row;
+    margin: 0px 40px 0px 40px;
+  }
+  .info-Container{
+    display: flex;
+    flex-direction: column;
+    margin: 0px 40px 0px 40px;
+
+    .categoryAndPrice{
+        padding-bottom: 20px;
+    }
+  }
+  /*end*/

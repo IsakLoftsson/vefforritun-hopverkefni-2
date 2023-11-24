@@ -1,0 +1,15 @@
+  button {
+    padding-inline: calc(var(--spacing) / 2);
+    margin-left: var(--spacing);
+    background-color: black;
+    color: white;
+    border-radius: 5px;
+    align-self: flex-start;
+  }
+
+  @media (max-width: 500px){
+    button {
+        margin-left: 0;
+        padding: 10px;
+      }
+  }
