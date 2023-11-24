@@ -242,7 +242,7 @@ export async function renderFrontpage(parentElement) {
   const addToCartButton = el('button', { class: 'skoda-flokka-button' }, 'Skoða alla flokka');
   addToCartButton.addEventListener('click', () => {
     console.log(`Takki virkar!`);
-    //hér , breytir url í category=1
+    //hér 
     window.history.pushState({}, '', `/?categories=1`);
     route();
   });
