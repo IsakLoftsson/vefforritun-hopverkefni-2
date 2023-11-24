@@ -1,5 +1,6 @@
 import { getProducts, getProductsFrontPage, getCategories, getCategoryNameById, searchProducts, getProductsByCategory } from './api.js';
 import { el } from './elements.js';
+import { route } from '../index.js';
 
 /**
  * Býr til leitarform.
@@ -156,12 +157,42 @@ export async function renderSearch( parentElement, searchHandler, query, categor
 }
 
 /**
+ * Sýna categories, með hnappi.
+ * @param {HTMLElement} parentElement Element sem á að innihalda forsíðu.
+ * @param {(e: SubmitEvent) => void} searchHandler Fall sem keyrt er þegar leitað er.
+ * @param {string} category Flokkur, til að sýna niðurstöður fyrir.
+ */
+export async function renderCategories(parentElement, searchHandler, category){
+  const checkIfCategories = document.querySelector('category-container');
+  if (checkIfCategories) {
+    checkIfCategories.remove();
+  }
+
+  /****  Birta flokka á frontpage ****/
+  const categoryContainer = el('div', { class: 'category-container' });
+  const heading2 = el('h1', { class: 'heading2', 'data-foo': 'bar' }, 'Skoðaðu vöruflokkana okkar');
+  parentElement.appendChild(heading2);
+  parentElement.appendChild(categoryContainer);
+
+  const categoryResult = await getCategories();
+  const categories = categoryResult.categories;
+  categories.forEach(category => {
+    categoryContainer.appendChild(createCategoryFrontPage(category));
+  });
+}
+
+/**
  * Sýna category, með leit.
  * @param {HTMLElement} parentElement Element sem á að innihalda forsíðu.
  * @param {(e: SubmitEvent) => void} searchHandler Fall sem keyrt er þegar leitað er.
  * @param {string} category Flokkur, til að sýna niðurstöður fyrir.
  */
 export async function renderCategory( parentElement, searchHandler, category) {
+  const checkIfCategories = document.querySelector('category-container');
+  if (checkIfCategories) {
+    checkIfCategories.remove();
+  }
+
   const categoryName = await getCategoryNameById(category)
   const heading = el('h1', { class: 'heading', 'data-foo': 'bar' }, categoryName.name);
   const searchForm = renderSearchForm(searchHandler, '');
@@ -192,6 +223,11 @@ export async function renderCategory( parentElement, searchHandler, category) {
  * @param {string | undefined} query Leitarorð, ef eitthvað, til að sýna niðurstöður fyrir.
  */
 export async function renderFrontpage(parentElement) {
+  const checkIfCategories = document.querySelector('category-container');
+  if (checkIfCategories) {
+    checkIfCategories.remove();
+  }
+
   const heading = el('h1', { class: 'heading', 'data-foo': 'bar' }, 'Nýjar vörur');
   const productContainer = el('category-products', {}, heading);
   parentElement.appendChild(heading);
@@ -211,6 +247,9 @@ export async function renderFrontpage(parentElement) {
   const addToCartButton = el('button', { class: 'skoda-flokka-button' }, 'Skoða alla flokka');
   addToCartButton.addEventListener('click', () => {
     console.log(`Takki virkar!`);
+    //hér , breytir url í category=1
+    window.history.pushState({}, '', `/?categories=1`);
+    route();
   });
   parentElement.appendChild(addToCartButton);
 
