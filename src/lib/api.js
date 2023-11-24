@@ -49,21 +49,18 @@ export async function sleep(ms) {
  *  kom upp.
  */
 export async function searchProducts(query, category) {
-  console.log('searchProducts: category:', category);
+  
   const url = new URL('products', API_URL);
   url.searchParams.set('search', query);
   url.searchParams.set('mode', 'list');
   // url.searchParams.set('limit', 12);
   // url.searchParams.set('offset', 0);
   url.searchParams.set('category', category);
-  console.log('searchProducts: category:', category);
 
   let response;
   try {
     response = await fetch(url);
-    console.log('searchProducts: response úr fetch:', response);
   } catch (e) {
-    console.error('Villa kom upp við að sækja gögn');
     return null;
   }
 
@@ -79,13 +76,10 @@ export async function searchProducts(query, category) {
   let json;
   try {
     json = await response.json();
-    console.log('json er:', json);
   } catch (e) {
-    console.error('Villa við að vinna úr JSON');
     return null;
   }
 
-  console.log('json.items:', json.items);
   return json.items;
 }
 
@@ -95,17 +89,15 @@ export async function searchProducts(query, category) {
  * @returns {Promise<LaunchDetail | null>} Vara.
  */
 export async function getProducts(id) {
-  //console.log('id:', id);
   const url = new URL(`products/${id}`, API_URL);
-  //console.log('url:', url);
   const result = await queryApi(url);
-  //console.log('result:', result);
 
   if (!result) {
     return null;
   }
 
   return {
+    // @ts-ignore
     id: result.key,
     title: result.title ?? '',
     price: result.price ?? '',
@@ -121,20 +113,18 @@ export async function getProducts(id) {
  * @returns {Promise<LaunchDetail | null>} Vara.
  */
 export async function getProductsFrontPage() {
-  const url = new URL(`products?limit=6`, API_URL);
+  const url = new URL('products?limit=6', API_URL);
   url.searchParams.set('mode', 'list');
-  //console.log('url:', url);
   const result = await queryApi(url);
-  //console.log('getProductFrontPage: result:', result);
 
-  const items = result.items;
-  //console.log('result.items:', result.items);
-
+  const {items} = result;
+  
   if (!result) {
     return null;
   }
 
   return {
+    // @ts-ignore
     items
   };
 }
@@ -144,20 +134,18 @@ export async function getProductsFrontPage() {
  * @returns {Promise<LaunchDetail | null>} Vara.
  */
 export async function getCategories() {
-  const url = new URL(`categories?limit=12`, API_URL);
+  const url = new URL('categories?limit=12', API_URL);
   url.searchParams.set('mode', 'list');
-  console.log('url:', url);
   const result = await queryApi(url);
-  console.log('getProductFrontPage: result:', result);
 
   const categories = result.items;
-  console.log('result.categories:', categories);
 
   if (!result) {
     return null;
   }
 
   return {
+    // @ts-ignore
     categories
   };
 }
@@ -166,21 +154,19 @@ export async function getCategories() {
  * Skilar vörum fyrir frontpage eða `null` ef ekkert fannst.
  * @returns {Promise<LaunchDetail | null>} Vara.
  */
-export async function getProductsByCategory(category_id, limit) {
-  const url = new URL(`products?limit=${limit}&category=${category_id}`, API_URL);
+export async function getProductsByCategory(categoryId, limit) {
+  const url = new URL(`products?limit=${limit}&category=${categoryId}`, API_URL);
   url.searchParams.set('mode', 'list');
-  console.log('getProductsByCategory: url:', url);
   const result = await queryApi(url);
-  console.log('getProductsByCategory: result:', result);
 
-  const items = result.items;
-  console.log('getProductsByCategory: result.items:', result.items);
+  const {items} = result;
 
   if (!result) {
     return null;
   }
 
   return {
+    // @ts-ignore
     items
   };
 }
@@ -189,16 +175,14 @@ export async function getProductsByCategory(category_id, limit) {
  * Skilar vörum fyrir frontpage eða `null` ef ekkert fannst.
  * @returns {Promise<LaunchDetail | null>} Vara.
  */
-export async function getCategoryNameById(category_id) {
-  const url = new URL(`categories/${category_id}`, API_URL);
-  //console.log('getCategoryNameById: url:', url);
+export async function getCategoryNameById(categoryId) {
+  const url = new URL(`categories/${categoryId}`, API_URL);
   const result = await queryApi(url);
-  //console.log('getCategoryNameById: result:', result);
   const name = result.title;
-  //console.log('getCategoryNameById: result.title:', result.title);
   if (!result) {
     return null;
   }
+  // @ts-ignore
   return {
     name
   };

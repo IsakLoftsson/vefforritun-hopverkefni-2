@@ -1,4 +1,7 @@
-import { renderDetails, renderFrontpage, renderSearch, renderCategory, searchAndRender, renderCategories} from './lib/ui.js';
+// eslint-disable-next-line import/no-cycle
+import {
+  renderDetails, renderFrontpage, renderSearch, renderCategory, searchAndRender, renderCategories
+} from './lib/ui.js';
 
 /**
  * Fall sem keyrir við leit.
@@ -6,7 +9,6 @@ import { renderDetails, renderFrontpage, renderSearch, renderCategory, searchAnd
  * @returns {Promise<void>}
  */
 async function onSearch(e) {
-  console.log('onSearch: e:', e);
   e.preventDefault();
   if (!e.target || !(e.target instanceof Element)) {
     return;
@@ -20,7 +22,6 @@ async function onSearch(e) {
   const qs = new URLSearchParams(search);
   // Náum í category úr URL
   const category = qs.get('category') ?? undefined;
-  console.log('onSearch: category:', category);
   await searchAndRender(document.body, e.target, value);
   // Setjum inn rétt URL í history með réttum category og value gildum
   window.history.pushState({}, '', `/?category=${category}&search=${value}`);
@@ -36,17 +37,12 @@ export function route() {
   const { search } = window.location;
 
   const qs = new URLSearchParams(search);
-  console.log('qs:', qs);
 
   // Athugum hvort við finnum gildi í URL strengnum
   const id = qs.get('id');
-  console.log('route(): id:', id);
   const query = qs.get('search') ?? undefined;
-  console.log('route(): search:', query);
   const category = qs.get('category') ?? undefined;
-  console.log('route(): category:', category);
   const categories = qs.get('categories') ?? undefined;
-  console.log('route(): categories:', categories);
 
   // finnum main html elementið
   const parentElement = document.body;
@@ -55,7 +51,7 @@ export function route() {
   if (main) {
     main.remove();
   }
-  //Fjarlægja fyrri vörur
+  //  Fjarlægja fyrri vörur
   const checkIfProducts = document.querySelector('category-products');
   if (checkIfProducts) {
     checkIfProducts.remove();
