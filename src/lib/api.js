@@ -166,8 +166,8 @@ export async function getCategories() {
  * Skilar vörum fyrir frontpage eða `null` ef ekkert fannst.
  * @returns {Promise<LaunchDetail | null>} Vara.
  */
-export async function getProductsByCategory(category_id) {
-  const url = new URL(`products?limit=12&category=${category_id}`, API_URL);
+export async function getProductsByCategory(category_id, limit) {
+  const url = new URL(`products?limit=${limit}&category=${category_id}`, API_URL);
   url.searchParams.set('mode', 'list');
   console.log('getProductsByCategory: url:', url);
   const result = await queryApi(url);
