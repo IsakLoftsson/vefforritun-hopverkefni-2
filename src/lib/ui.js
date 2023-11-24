@@ -210,7 +210,7 @@ export async function renderCategory( parentElement, searchHandler, category) {
   const productContainer = el('category-products', {}, );
   parentElement.appendChild(productContainer);
   // Sækjum vörur úr API út frá category með getProductsByCategory()
-  const result = await getProductsByCategory(category);
+  const result = await getProductsByCategory(category, 12);
   const items = result.items;
   // Búum til vöru element fyrir hverja vöru sem við finnum í API, með createProductFrontPage() og bætum við í category-products
   items.forEach(item => {
@@ -370,4 +370,22 @@ export async function renderDetails(parentElement, id) {
   }
   // Útfæra ef gögn
   parentElement.appendChild(createProduct(result));
+
+  // Búum til element fyrir heading
+  const heading2 = el('h1', { class: 'heading2', 'data-foo': 'bar' }, `Meira úr ${result.category_title}`);
+  parentElement.appendChild(heading2);
+  // Sækjum upplýsingar um hvaða category við erum í
+  const resultCategoryId = result.category_id
+  // Búum til element fyrir vörurnar
+  const productContainer = el('category-products', {}, );
+  parentElement.appendChild(productContainer);
+  // Sækjum vörur úr API út frá category með getProductsByCategory()
+  const resultFromCategory = await getProductsByCategory(resultCategoryId, 3);
+  console.log('resultFromCategory:', resultFromCategory);
+  const items = resultFromCategory.items;
+  console.log('items:', items);
+  // Búum til vöru element fyrir hverja vöru sem við finnum í API, með createProductFrontPage() og bætum við í category-products
+  items.forEach(item => {
+    productContainer.appendChild(createProductFrontPage(item));
+  });
 }

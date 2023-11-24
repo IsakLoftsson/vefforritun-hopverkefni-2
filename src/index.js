@@ -80,6 +80,17 @@ export function route() {
   if (checkIfHeading2) {
     checkIfHeading2.remove();
   }
+  // fjarlægja main-results
+  const checkIfMainResults = document.querySelector('.main-results');
+  if (checkIfMainResults) {
+    checkIfMainResults.remove();
+  }
+  // fjarlægja headerandsearch
+  const checkIfHeaderAndSearch = document.querySelector('headerandsearch');
+  if (checkIfHeaderAndSearch) {
+    checkIfHeaderAndSearch.remove();
+  }
+
   // Köllum á rétta render fallið sem á við til að birta síðu sem passar við URL
   if (id) {
     // ef id hefur gildi þá erum við að byðja um ákveðna vöru. Notum renderDetails til að birta þá vöru
