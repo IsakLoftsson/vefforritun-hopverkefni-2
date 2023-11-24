@@ -25,6 +25,7 @@ async function onSearch(e) {
   await searchAndRender(document.body, e.target, value);
   // Setjum inn rétt URL í history með réttum category og value gildum
   window.history.pushState({}, '', `/?category=${category}&search=${value}`);
+  // eslint-disable-next-line no-use-before-define
   route();
 }
 
