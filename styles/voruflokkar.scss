@@ -1,0 +1,55 @@
+.category-container {
+    display: grid;
+    grid-template-columns: repeat(12, 4fr);
+    width: 100%;
+
+    .front-page-site{
+        border: solid 1px black;
+        margin: 10px;
+        padding-top: 25px;
+        padding-bottom: 25px;
+
+        .result {
+            .title{
+                text-align: center;
+
+                a {
+                    text-decoration: none;
+                    color: black;
+                    font-size: 50px;
+                }
+            }
+        }
+      
+    }
+}
+//skoða hvort hægt sé að setja beint inn @media þar sem a er skilgreint hér fyrir ofan
+@media (max-width: 768px) {
+    .category-container .front-page-site .result .title a {
+        font-size: 3vw;
+        font-weight: bold;
+      }
+}
+
+@media (max-width: 500px){
+    .category-container .front-page-site .result .title a, .category-products .result .title a {
+        font-size: 5vw;
+        font-weight: bold;
+      }
+    
+      .category-container .front-page-site .result .image, 
+      .category-products .result .image {
+        width: 100%;
+        height: auto;
+      }
+
+      main, .category-products, .category-container {
+        grid-template-columns: 1fr;
+      }
+    
+      .category-container, .category-products, .front-page-site {
+        grid-template-columns: 1fr;
+      }
+    
+}
+  
