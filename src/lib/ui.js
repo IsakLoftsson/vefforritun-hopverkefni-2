@@ -33,7 +33,7 @@ function setLoading(parentElement, searchForm = undefined) {
     return;
   }
 
-  const button = searchForm.querySelector('button');
+  const button = document.querySelector('button');
 
   if (button) {
     button.setAttribute('disabled', 'disabled');
@@ -56,7 +56,7 @@ function setNotLoading(parentElement, searchForm = undefined) {
     return;
   }
 
-  const disabledButton = searchForm.querySelector('button[disabled]');
+  const disabledButton = document.querySelector('button[disabled]');
 
   if (disabledButton) {
     disabledButton.removeAttribute('disabled');
@@ -69,35 +69,34 @@ function setNotLoading(parentElement, searchForm = undefined) {
  * @param {string} query Leitarstrengur.
  */
 function createSearchResults(results, query) {
-  const list = el('ul', { class: 'results' });
-  list.appendChild(el('h2', { class: 'results__title' }, `Leitarniðurstöður fyrir: "${query}"`));
+  const checkIfmainElement = document.querySelector('.main-results');
+  if (checkIfmainElement) {
+    checkIfmainElement.remove();
+  }
+  
+  const mainElement = el('ul', { class: 'main-results' });
+  mainElement.appendChild(el('h2', { class: 'results__title' }, `Leitarniðurstöður fyrir: "${query}"`));
+  const categoryProducts = el('category-products', {}, );
+  mainElement.appendChild(categoryProducts);
 
   if (!results) {
-    const noResultElement = el('li', {}, `Villa við leit að ${query}`);
-    list.appendChild(noResultElement);
-    return list;
+    const noResultElement = el('villa1', {}, `Villa við leit að ${query}`);
+    mainElement.appendChild(noResultElement);
+    return mainElement;
   }
 
   if (results.length === 0) {
-    const noResultElement = el('li', {}, `Engar niðurstöður fyrir leit að ${query}`);
-    list.appendChild(noResultElement);
-    return list;
+    const noResultElement = el('villa2', {}, `Engar niðurstöður fyrir leit að ${query}`);
+    mainElement.appendChild(noResultElement);
+    return mainElement;
   }
 
-  for (const result of results) {
-    const imageElement = el('img', { src: result.image, alt: 'Product Image' });
-    const linkElement = el('a', { href: `/?id=${result.id}` }, imageElement);
-    const resultElement = el('li', { class: 'result' },
-      el('span', { class: 'image' }, linkElement),
-      el('span', { class: 'title' }, result.title),
-      el('span', { class: 'price' }, result.price),
-      el('span', { class: 'kr'}, 'kr.-'),
-      el('span', { class: 'category_title' }, result.category_title),
-    );
-    list.appendChild(resultElement);
-  }
+  console.log('createSearchResults: results:', results);
+  results.forEach(item => {
+    categoryProducts.appendChild(createProductFrontPage(item));
+  });
 
-  return list;
+  return categoryProducts;
 }
 
 /**
@@ -108,7 +107,7 @@ function createSearchResults(results, query) {
  */
 export async function searchAndRender(parentElement, searchForm, query, category = undefined) {
   console.log('searchAndRender: category:', category);
-  const mainElement = parentElement.querySelector('main');
+  const mainElement = parentElement.querySelector('results-main-element');
 
   if (!mainElement) {
     console.warn('fann ekki <main> element');
@@ -116,37 +115,42 @@ export async function searchAndRender(parentElement, searchForm, query, category
   }
 
   // Fjarlægja fyrri niðurstöður
-  const resultsElement = mainElement.querySelector('.results');
+  const resultsElement = parentElement.querySelector('category-products');
   if (resultsElement) {
     resultsElement.remove();
   }
 
   setLoading(mainElement, searchForm);
   const results = await searchProducts(query, category);
-  console.log('searchAndRender: results from searchProducts:', results);
-  setNotLoading(mainElement, searchForm);
-
   const resultsEl = createSearchResults(results, query);
-  console.log('searchAndRender: resultsEl:', resultsEl);
-
-  mainElement.appendChild(resultsEl);
+  parentElement.appendChild(resultsEl);
+  setNotLoading(mainElement, searchForm);
 }
 
 /**
  * Sýna leit.
  * @param {HTMLElement} parentElement Element sem á að innihalda forsíðu.
  * @param {(e: SubmitEvent) => void} searchHandler Fall sem keyrt er þegar leitað er.
- * @param {string | undefined} query Leitarorð, ef eitthvað, til að sýna niðurstöður fyrir.
+ * @param {string} query Leitarorð, ef eitthvað, til að sýna niðurstöður fyrir.
+ * @param {string} category Flokkur, til að sýna niðurstöður fyrir.
  */
-export async function renderSearch( parentElement, searchHandler, query = undefined, category = undefined) {
+export async function renderSearch( parentElement, searchHandler, query, category) {
   console.log('renderSearch: category:', category);
   const categoryName = await getCategoryNameById(category)
   const heading = el('h1', { class: 'heading', 'data-foo': 'bar' }, categoryName.name);
   const searchForm = renderSearchForm(searchHandler, query);
-  const container = el('main', {}, heading, searchForm);
-  parentElement.appendChild(container);
+  const container = el('headerAndSearch', {}, heading, searchForm);
+  const checkIfHeaderAndSearch = parentElement.querySelector('headerandsearch');
+  if (!checkIfHeaderAndSearch) {
+    parentElement.appendChild(container);
+  }
   if (!query) {
     return;
+  }
+  const checkIfContainer = parentElement.querySelector('results-main-element');
+  if (!checkIfContainer) {
+    const productContainer = el('results-main-element', {}, );
+    parentElement.appendChild(productContainer);
   }
   searchAndRender(parentElement, searchForm, query, category);
 }
@@ -155,9 +159,9 @@ export async function renderSearch( parentElement, searchHandler, query = undefi
  * Sýna category, með leit.
  * @param {HTMLElement} parentElement Element sem á að innihalda forsíðu.
  * @param {(e: SubmitEvent) => void} searchHandler Fall sem keyrt er þegar leitað er.
- * @param {string | undefined} query Leitarorð, ef eitthvað, til að sýna niðurstöður fyrir.
+ * @param {string} category Flokkur, til að sýna niðurstöður fyrir.
  */
-export async function renderCategory( parentElement, searchHandler, category = undefined) {
+export async function renderCategory( parentElement, searchHandler, category) {
   const categoryName = await getCategoryNameById(category)
   const heading = el('h1', { class: 'heading', 'data-foo': 'bar' }, categoryName.name);
   const searchForm = renderSearchForm(searchHandler, '');
@@ -258,30 +262,23 @@ export function createProduct(product) {
  * @returns Element sem inniheldur öll gögn um vöru.
  */
 export function createProductFrontPage(product) {
-  console.log('createProductFrontPage: product:', product);
   const productEl = el('div', { class: 'front-page-site' });
   const imageElement = el('img', { src: product.image, alt: 'Product Image' });
   const linkElement = el('a', { href: `/?id=${product.id}` }, imageElement);
   const resultElement = el('li', { class: 'result' },
     el('span', { class: 'image' }, linkElement),
     el('div', { class: 'content' },
-
-    el('div', { class: 'priceAndKr' },
-
-    el('a', { class: 'price' }, product.price),
-    el('a', { class: 'kr'}, 'kr.-'),
-  ),
-  el('div', { class: 'titleAndCata' },
-
-  el('a', { class: 'title' }, product.title),
-  el('a', { class: 'category_title', href: `/?category=${product.category_id}`}, product.category_title),
-  ),
-    ),
-    
-    
+      el('div', { class: 'priceAndKr' },
+        el('a', { class: 'price' }, product.price),
+        el('a', { class: 'kr'}, 'kr.-'),
+      ),
+      el('div', { class: 'titleAndCata' },
+        el('a', { class: 'title' }, product.title),
+        el('a', { class: 'category_title', href: `/?category=${product.category_id}`}, product.category_title),
+      ),
+    ),   
   );
   productEl.appendChild(resultElement);
-
   return productEl;
 }
 
